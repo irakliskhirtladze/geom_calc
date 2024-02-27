@@ -61,7 +61,7 @@ class MainWindow(QMainWindow):
         """Return to home page from any other page"""    
         self.stackedWidget.setCurrentIndex(0)
 
-    def calculate_circle(self):
+    def calculate_circle(self) -> None:
         """Try to calculate circle if radius is more than 0"""
 
         radius = float(self.ui.doubleSpinBox_9.text())
