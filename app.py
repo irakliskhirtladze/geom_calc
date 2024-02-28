@@ -12,12 +12,16 @@ class MainWindow(QMainWindow):
         self.ui = loadUi("ui/calc.ui", self)
         # App always srarts with home page
         self.stackedWidget.setCurrentIndex(0)
+
+         # Figure names with their radio buttons and page indexes
+        self.radio_buttons = {'circle':(self.ui.radioButton, 1),
+                              'triangle':(self.ui.radioButton_2, 2),
+                              'trap':(self.ui.radioButton_3, 3),
+                              'rect':(self.ui.radioButton_4, 4)}
         
         # Clicking radiobuttons displays correcponding figure on home page
-        self.ui.radioButton.clicked.connect(self.change_image)
-        self.ui.radioButton_2.clicked.connect(self.change_image)
-        self.ui.radioButton_3.clicked.connect(self.change_image)
-        self.ui.radioButton_4.clicked.connect(self.change_image)
+        for rb in self.radio_buttons.items():
+            rb[1][0].clicked.connect(self.change_image)
             
         # Go to specific figure page from home page
         self.ui.pushButton.clicked.connect(self.switch_page)
@@ -26,7 +30,7 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_8.clicked.connect(self.go_home)
         self.ui.pushButton_9.clicked.connect(self.go_home)
         self.ui.pushButton_7.clicked.connect(self.go_home)
-        self.ui.pushButton_2.clicked.connect(self.go_home)
+        self.ui.pushButton_2.clicked.connect(self.go_home)            
 
         # Calculate area and/or perimeter of every figure
         self.ui.pushButton_6.clicked.connect(self.calculate_circle)
@@ -36,26 +40,17 @@ class MainWindow(QMainWindow):
         
     def change_image(self) -> None:
         """Changes image on home page when radiobutton is clicked"""
-        if self.ui.radioButton.isChecked():
-            pixmap = QPixmap(f"resources/circle.png")
-        elif self.ui.radioButton_2.isChecked():
-            pixmap = QPixmap(f"resources/triangle.png")
-        elif self.ui.radioButton_3.isChecked():
-            pixmap = QPixmap(f"resources/trap.png")
-        elif self.ui.radioButton_4.isChecked():
-            pixmap = QPixmap(f"resources/rect.png")    
-        self.ui.label.setPixmap(pixmap)
+        for rb in self.radio_buttons.items():
+            if rb[1][0].isChecked():
+                self.ui.label.setPixmap(QPixmap(f"resources/{rb[0]}.png"))
+                break
 
     def switch_page(self) -> None:
         """ Go to a selected figure's page when "Calculate figure" button is clicked" """
-        if self.ui.radioButton.isChecked():
-            self.stackedWidget.setCurrentIndex(1)
-        elif self.ui.radioButton_2.isChecked():
-            self.stackedWidget.setCurrentIndex(2)
-        elif self.ui.radioButton_3.isChecked():
-            self.stackedWidget.setCurrentIndex(3)
-        elif self.ui.radioButton_4.isChecked():
-            self.stackedWidget.setCurrentIndex(4)
+        for rb in self.radio_buttons.items():
+            if rb[1][0].isChecked():
+                self.stackedWidget.setCurrentIndex(rb[1][1])
+                break
 
     def go_home(self) -> None:   
         """Return to home page from any other page"""    
